@@ -1,81 +1,103 @@
-# Port Wine: CTF Challenge Documentation
+## **Port Wine: CTF Challenge**
+A Capture The Flag (CTF) challenge focused on **network security**, where participants exploit vulnerabilities in a **Flask web application running on multiple ports** to retrieve hidden flags.  
 
-## Overview
-- **Challenge Name:** PortWine
-- **Category:** Network Security
-- **Difficulty Level:** Medium
-- **Description:**  
-  This challenge requires participants to exploit vulnerabilities in a Flask web application running on multiple ports to retrieve hidden flags. Participants will utilize network scanning and exploitation techniques to solve the challenge.
+### **Challenge Overview**
+- **Challenge Name:** Port Wine
+- **Category:** Network Security  
+- **Difficulty Level:** Medium  
+- **Description:** Participants will utilize network scanning and exploitation techniques to identify and extract hidden flags from multiple Flask applications running on different ports.  
 
-## Objective
-The main objective is to find and retrieve the flag hidden in the Flask application. Participants must understand the application’s routing and vulnerabilities to successfully capture the flag.
+---
 
-## Setup Instructions
+## **Objective**
+The goal is to **retrieve the flag** hidden within the Flask web application by:
+- Identifying **open ports** and **running services**.
+- Understanding **application behavior** and **potential vulnerabilities**.
+- Extracting **hidden flags** using various techniques, including **Brainfuck decoding**.  
 
-### 1. Environment Preparation
-- **Server Setup:** Deploy a Flask application on a virtual machine (VM) or a cloud server.
-- **Operating System:** Use a Linux distribution like Ubuntu.
-- **Install Necessary Software:**
-  - Python 3
-  - Flask
-  - Additional libraries (if required for your application)
+---
 
-### 2. Flask Application Configuration
-- Create the Flask application.
-
-### 3. Port Configuration
-- The application is set to run on four different ports: **3000, 4000, 5000, and 8080**.
-- Ensure static files (like `index.html` and `style.css`) are placed in the public directory.
-
-### 4. Testing the Challenge
-- Use Nmap to scan the server for open ports:
+## **Setup Instructions**
+### **1. Environment Preparation**
+- **Server Setup:** Deploy the Flask application on a **virtual machine (VM)** or **cloud server**.  
+- **Operating System:** Recommended **Linux (Ubuntu)** environment.  
+- **Install Dependencies:**
   ```sh
-  nmap [Server_IP]
-  ```
-  **Description:** Performs a basic scan to list open ports.
-  
-  ```sh
-  nmap -sV [Server_IP]
-  ```
-  **Description:** Identifies open ports and detects the service versions.
-- Check that the expected open ports (3000, 4000, 5000, 8080) are accessible.
-- Test flag retrieval by accessing the `/flag` route on the appropriate ports.
-
-## Challenge Walkthrough
-
-### 1. Scan for Open Ports
-- Use Nmap to discover available ports.
-
-### 2. Accessing the Web Applications
-- Use a browser or `curl`:
-  ```sh
-  curl http://[Server_IP]:3000
-  curl http://[Server_IP]:4000
-  curl http://[Server_IP]:5000
-  curl http://[Server_IP]:8080
+  sudo apt update && sudo apt install python3 python3-pip
+  pip install flask
   ```
 
-## Retrieving the Flags
+### **2. Running the Flask Application**
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/port-wine-ctf.git
+   cd port-wine-ctf
+   ```
+2. Start the Flask applications:
+   ```sh
+   python3 index.py
+   ```
+3. The applications will run on the following **ports**:
+   - **8000**  
+   - **5001**  
+   - **8080**  
+   - **4000**  
 
-### Steps to Retrieve the Flag
-1. Access `/flag` on **port 5000** to get the encrypted `flag.pdf`.
-2. Access `/flag` on **port 8080** to retrieve the encoded password.
-3. Decode the password using **Brainfuck** and use it to decrypt `flag.pdf`.
+### **3. Understanding the Web Application**
+- The **homepage** (`/`) serves an `index.html` file from the **public directory** (on port **8000**).  
+- The `/flag` route on different ports **reveals different clues** to retrieve the final flag.
 
+---
+
+## **Challenge Walkthrough**
+### **1. Scan for Open Ports**
+Use **Nmap** to identify active services:  
 ```sh
-curl http://[Server_IP]:5000/flag
-curl http://[Server_IP]:8080/flag
+nmap [Server_IP]
 ```
+For more detailed version detection:
+```sh
+nmap -sV [Server_IP]
+```
+Expected open ports: `8000, 5001, 8080, 4000`
 
-### Additional Notes
-- Accessing `/flag` on ports **3000 and 4000** will not return a flag.
+---
 
-## Flag Format
-- The flag should be formatted as:  
-  ```
+### **2. Retrieving the Flags**
+1. **Port 5001**  
+   - Access:  
+     ```sh
+     curl http://[Server_IP]:5001/flag
+     ```
+   - Returns a **Google Drive link** containing an encrypted `flag.pdf`.
+
+2. **Port 8080**  
+   - Access:  
+     ```sh
+     curl http://[Server_IP]:8080/flag
+     ```
+   - Returns an **encoded password**: `Flag4_Txt_Op3n#`
+
+3. **Port 8000 & 4000**  
+   - No useful flags are found.
+
+---
+
+### **3. Decoding the Password & Extracting the Flag**
+1. The password retrieved from **port 8080** is **Brainfuck-encoded**.  
+2. Decode it using a Brainfuck interpreter.
+3. Use the **decoded password** to unlock `flag.pdf`.
+
+---
+
+## **Flag Format**
+- The final flag should be in the format:  
+  ```sh
   CTF{hidden_flag}
   ```
-- Ensure flags are securely stored and not exposed in the application's source code.
+- Ensure the flags **are not exposed in the source code**.
 
-## License
-This challenge is created for educational purposes. Feel free to use it for CTF events and learning exercises.
+---
+
+## **License**
+This project is licensed under the [MIT License](LICENSE).
